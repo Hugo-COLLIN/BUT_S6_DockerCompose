@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   apache:
-    image: httpd:latest
+    build: .
     ports:
       - "8080:80"
     volumes:
-      - ./public-html:/usr/local/apache2/htdocs
+      - ./public-html:/var/www/html
     networks:
       - app-network
 
