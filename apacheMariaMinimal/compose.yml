@@ -1,8 +1,10 @@
 version: '3.8'
 
 services:
-  apache:
-    build: .
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
     ports:
       - "8080:80"
     volumes:
@@ -11,7 +13,9 @@ services:
       - app-network
 
   mariadb:
-    image: mariadb:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.mariadb
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: mydatabase
