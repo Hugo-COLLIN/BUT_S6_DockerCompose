@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  php:
+    image: php:8.1-fpm-alpine
+    volumes:
+      - ./php:/var/www/html
+    networks:
+      - backend
+    depends_on:
+      - mariadb
+    environment:
+      MYSQL_DATABASE: nom_de_votre_base
+      MYSQL_USER: utilisateur
+      MYSQL_PASSWORD: mot_de_passe
+    command: docker-php-ext-install mysqli pdo pdo_mysql
+
+  httpd:
+    image: httpd:2.4-alpine
+    volumes:
+      - ./php:/usr/local/apache2/htdocs/
+      - ./my-httpd.conf:/usr/local/apache2/conf/httpd.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+    networks:
+      - backend
+
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mot_de_passe_root
+      MYSQL_DATABASE: nom_de_votre_base
+      MYSQL_USER: utilisateur
+      MYSQL_PASSWORD: mot_de_passe
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  db_data:

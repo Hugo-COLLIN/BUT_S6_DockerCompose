@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  apache:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public-html:/var/www/html
+    networks:
+      - app-network
+
+  mariadb:
+    image: mariadb:10.5.8-focal
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
