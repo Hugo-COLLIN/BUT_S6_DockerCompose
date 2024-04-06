@@ -5,17 +5,24 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.php
-    ports:
-      - "8080:80"
     volumes:
       - ./public-html:/var/www/html
     networks:
       - app-network
 
+  apache:
+    image: httpd:2.4-alpine
+    depends_on:
+      - php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public-html:/usr/local/apache2/htdocs/
+    networks:
+      - app-network
+
   mariadb:
-    build:
-      context: .
-      dockerfile: Dockerfile.mariadb
+    image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: mydatabase
