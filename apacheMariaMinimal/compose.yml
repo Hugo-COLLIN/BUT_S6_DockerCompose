@@ -18,8 +18,14 @@ services:
       - "8080:80"
     volumes:
       - ./public-html:/usr/local/apache2/htdocs/
+      - ./config/my-php.conf:/usr/local/apache2/conf/my-php.conf
     networks:
       - app-network
+    command:
+      - /bin/sh
+      - -c
+      - |
+        echo "Include /usr/local/apache2/conf/my-php.conf" >> /usr/local/apache2/conf/httpd.conf && httpd-foreground
 
   mariadb:
     image: mariadb:latest
